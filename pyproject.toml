@@ -1,0 +1,34 @@
+[project]
+name = "vdsnip"
+version = "0.1.0"
+description = "Stream polars DataFrames to a live VisiData pane in Neovim (via sniprun)."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Matteo Bolner" }]
+keywords = ["visidata", "polars", "neovim", "sniprun", "arrow", "dataframe"]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering",
+]
+
+# No required deps: polars' own write_ipc needs no pyarrow. The pandas path
+# imports pyarrow lazily -- install the extra only if you feed pandas frames.
+dependencies = []
+
+[project.optional-dependencies]
+pandas = ["pyarrow"]
+
+[project.urls]
+Homepage = "https://github.com/matteobolner/vdsnip"
+Repository = "https://github.com/matteobolner/vdsnip"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vdsnip"]
