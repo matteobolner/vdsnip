@@ -95,6 +95,12 @@ local function open_pane()
   vim.cmd(config.open)
   state.win = vim.api.nvim_get_current_win()
 
+  -- Give the split its own empty, unmodified buffer. termopen (Neovim >= 0.11,
+  -- where it wraps jobstart({term=true})) errors with E5108 otherwise, and a
+  -- plain `split` reuses the current -- modified -- source buffer.
+  local buf = vim.api.nvim_create_buf(false, false)
+  vim.api.nvim_win_set_buf(state.win, buf)
+
   state.chan = vim.fn.termopen({ 'vd', config.path }, {
     on_exit = function()
       state.chan = nil
@@ -103,7 +109,7 @@ local function open_pane()
       stop_watcher()
     end,
   })
-  state.bufnr = vim.api.nvim_get_current_buf()
+  state.bufnr = buf
   vim.bo[state.bufnr].bufhidden = 'wipe'
 
   start_watcher()
